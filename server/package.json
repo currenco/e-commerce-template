@@ -7,7 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "swagger": "node swagger.js",
-    "prestart": "npm run swagger",
+    "build": "npm run swagger",
     "start": "node server.js",
     "predev": "npm run swagger",
     "dev": "nodemon server.js",

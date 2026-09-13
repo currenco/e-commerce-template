@@ -221,11 +221,15 @@ export const updatePassword = catchAsyncErrors(async (req, res, next) => {
 export const updateProfile = catchAsyncErrors(async (req, res, next) => {
   const { name, email } = req.body;
 
+  if (!name || !email) {
+    return next(new ErrorHandler('Name and email are required!', 400));
+  }
+
   if (name.trim().length === 0 || email.trim().length === 0) {
     return next(new ErrorHandler('Name and email cannot be empty!', 400));
   }
 
-  let avatarData = {};
+  let avatarData;
 
   if (req.files && req.files.avatar) {
     const { avatar } = req.files;
@@ -245,25 +249,25 @@ export const updateProfile = catchAsyncErrors(async (req, res, next) => {
       public_id: newProfileImage.public_id,
       url: newProfileImage.secure_url,
     };
-
-    let user;
-
-    if (Object.keys(avatarData).length === 0) {
-      user = await database.query(
-        'UPDATE users SET name = $1, email = $2 WHERE id = $3 RETURNING *',
-        [name, email, req.user.id]
-      );
-    } else {
-      user = await database.query(
-        'UPDATE users SET name = $1, email = $2, avatar = $3 WHERE id = $4 RETURNING *',
-        [name, email, avatarData, req.user.id]
-      );
-    }
-
-    res.status(200).json({
-      success: true,
-      message: 'Profile updated sucessfully.',
-      user: user.rows[0], // return the updated user
-    });
   }
+
+  let user;
+
+  if (avatarData) {
+    user = await database.query(
+      'UPDATE users SET name = $1, email = $2, avatar = $3 WHERE id = $4 RETURNING *',
+      [name, email, avatarData, req.user.id]
+    );
+  } else {
+    user = await database.query(
+      'UPDATE users SET name = $1, email = $2 WHERE id = $3 RETURNING *',
+      [name, email, req.user.id]
+    );
+  }
+
+  res.status(200).json({
+    success: true,
+    message: 'Profile updated successfully.',
+    user: user.rows[0],
+  });
 });
