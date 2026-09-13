@@ -4,7 +4,7 @@ import { createOrderItemTable } from '../models/orderItems.table.js';
 import { createPaymentsTable } from '../models/payments.table.js';
 import { createProductTable } from '../models/product.table.js';
 import { createProductReviewTable } from '../models/productReviews.table.js';
-import { createShippingInfoTable } from '../models/shippinginfo.table.js';
+import { createShippingInfoTable } from '../models/shippingInfo.table.js';
 import { createUserTable } from '../models/user.table.js';
 
 export const createTables = async () => {
