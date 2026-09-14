@@ -12,6 +12,7 @@ import swaggerUi from 'swagger-ui-express';
 
 // import routers
 import authRouter from './routes/auth.routes.js';
+import productRouter from './routes/product.route.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const swaggerDocument = JSON.parse(
@@ -43,7 +44,9 @@ app.use(
   })
 );
 
+// All routes
 app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/product', productRouter);
 
 createTables();
 
